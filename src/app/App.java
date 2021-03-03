@@ -5,6 +5,7 @@
  */
 package app;
 
+import Views.AuthScreen;
 /**
  *
  * @author juan
@@ -16,6 +17,9 @@ public class App {
      */
     public static void main(String[] args) {
         // TODO code application logic here
+
+        AuthScreen authScreen = new AuthScreen();
+        authScreen.setVisible(true);
     }
     
 }
