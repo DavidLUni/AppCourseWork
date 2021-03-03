@@ -10,12 +10,14 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.BoxLayout;
 import javax.swing.GroupLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -42,6 +44,10 @@ public class AuthScreen extends JFrame
         //Panel where the logo is
         LogoPanel = new JPanel();
         LogoPanel.setBackground(new Color(111,207,151));
+        
+        logoLabel = new JLabel();
+        Image img = new ImageIcon(getClass().getResource("/images/background.png")).getImage().getScaledInstance(300, 500, Image.SCALE_SMOOTH);
+        logoLabel.setIcon(new ImageIcon(img));
         
         //Panel where All the screen auth will be allocated.
         authPanel = new JPanel();
@@ -141,6 +147,7 @@ public class AuthScreen extends JFrame
         authPanel.add(authContainer);
         
         
+        LogoPanel.add(logoLabel);
         //remove when it is finished
         setUndecorated(false);
         setResizable(false);
@@ -224,6 +231,7 @@ public class AuthScreen extends JFrame
     }
     
     private JPanel LogoPanel;
+    private JLabel logoLabel;
     private JPanel authPanel;
     private JLabel closeLabel;
     private JPanel  authContainer;
