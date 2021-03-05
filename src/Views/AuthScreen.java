@@ -149,7 +149,7 @@ public class AuthScreen extends JFrame
         
         LogoPanel.add(logoLabel);
         //remove when it is finished
-        setUndecorated(false);
+        setUndecorated(true);
         setResizable(false);
         
         //Layout
