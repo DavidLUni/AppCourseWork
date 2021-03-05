@@ -5,6 +5,7 @@
  */
 package app;
 
+import Views.AppScreen;
 import Views.AuthScreen;
 /**
  *
@@ -18,8 +19,8 @@ public class App {
     public static void main(String[] args) {
         // TODO code application logic here
 
-        AuthScreen authScreen = new AuthScreen();
-        authScreen.setVisible(true);
+        AppScreen appScreen = new AppScreen();
+        appScreen.setVisible(true);
     }
     
 }
