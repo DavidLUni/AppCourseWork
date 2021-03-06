@@ -124,6 +124,10 @@ public class AppScreen extends JFrame
             }
         });
         
+        //Content
+        AboutPanel = new AboutUsPanel();
+        ContentContainer.add(AboutPanel, "ABOUT");
+        
         MenuContainer.add(menuPanel, BorderLayout.CENTER);
         
         closeContainer.add(closeLabel);
@@ -187,4 +191,7 @@ public class AppScreen extends JFrame
     private JPanel closeContainer;
     private JLabel closeLabel;
     private MenuPanel menuPanel;
+    
+    //panelcards
+    private AboutUsPanel AboutPanel;
 }

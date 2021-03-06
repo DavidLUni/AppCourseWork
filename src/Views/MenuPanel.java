@@ -126,8 +126,8 @@ public class MenuPanel extends JPanel
         //addding mouse Listener
         dashBoardButton.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
+            public void mousePressed(MouseEvent e) {
+                super.mousePressed(e);
                 
                 dashBoardButton.setBackground(new Color(255,255,255));
                 dashBoardButton.setForeground(new Color(111,207,151));
@@ -146,8 +146,8 @@ public class MenuPanel extends JPanel
         
         profileButton.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e); //To change body of generated methods, choose Tools | Templates.
+            public void mousePressed(MouseEvent e) {
+                super.mousePressed(e); //To change body of generated methods, choose Tools | Templates.
                 
                 dashBoardButton.setBackground(new Color(111,207,151));
                 dashBoardButton.setForeground(new Color(255,255,255));
@@ -165,8 +165,8 @@ public class MenuPanel extends JPanel
         
         adminButton.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e); //To change body of generated methods, choose Tools | Templates.
+            public void mousePressed(MouseEvent e) {
+                super.mousePressed(e); //To change body of generated methods, choose Tools | Templates.
                 
                 dashBoardButton.setBackground(new Color(111,207,151));
                 dashBoardButton.setForeground(new Color(255,255,255));
@@ -184,8 +184,8 @@ public class MenuPanel extends JPanel
         
         aboutUsButton.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e); //To change body of generated methods, choose Tools | Templates.
+            public void mousePressed(MouseEvent e) {
+                super.mousePressed(e); //To change body of generated methods, choose Tools | Templates.
                 
                 dashBoardButton.setBackground(new Color(111,207,151));
                 dashBoardButton.setForeground(new Color(255,255,255));
@@ -198,7 +198,7 @@ public class MenuPanel extends JPanel
                 
                 aboutUsButton.setBackground(new Color(255,255,255));
                 aboutUsButton.setForeground(new Color(111,207,151));
-            }
+            }            
         });
         
         
