@@ -124,6 +124,13 @@ public class AppScreen extends JFrame
             }
         });
         
+        //Content
+        ProfilePanel = new ProfilePanel();
+        AboutPanel = new AboutUsPanel();
+        
+        ContentContainer.add(ProfilePanel, "PROFILE");
+        ContentContainer.add(AboutPanel, "ABOUT");
+        
         MenuContainer.add(menuPanel, BorderLayout.CENTER);
         
         closeContainer.add(closeLabel);
@@ -159,7 +166,9 @@ public class AppScreen extends JFrame
     
     private void onClickProfile(ActionEvent e)
     {
-        System.out.println("Click on Profile");
+       System.out.println("Click on Profile");
+       CardLayout cards = (CardLayout)(ContentContainer.getLayout());
+       cards.show(ContentContainer, "PROFILE");
     }
     
         
@@ -172,11 +181,16 @@ public class AppScreen extends JFrame
     private void onClickAbout(ActionEvent e)
     {
         System.out.println("Click on About us");
+        CardLayout cards = (CardLayout)(ContentContainer.getLayout());
+        cards.show(ContentContainer, "ABOUT");
     }
     
     private void onClickLogOut(ActionEvent e)
     {
         System.out.println("Click on LogOut");
+        AuthScreen Login = new AuthScreen();
+        Login.setVisible(true);
+        this.dispose();
     }
     
     
@@ -187,4 +201,8 @@ public class AppScreen extends JFrame
     private JPanel closeContainer;
     private JLabel closeLabel;
     private MenuPanel menuPanel;
+    
+    //panelcards
+    private ProfilePanel ProfilePanel;
+    private AboutUsPanel AboutPanel;
 }
