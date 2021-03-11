@@ -306,7 +306,7 @@ public class ProfilePanel extends JPanel
        String roleName = (String)cb.getSelectedItem();
        System.out.println(roleName);
    }
-    
+   
     private JLabel Title;
     private JLabel Background;
     private JPanel contentPanel;
