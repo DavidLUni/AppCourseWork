@@ -6,6 +6,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -125,10 +126,14 @@ public class AppScreen extends JFrame
         });
         
         //Content
+        DashboardPanel = new DashboardPanel();
         ProfilePanel = new ProfilePanel();
+        AdminPanel = new AdminPanel();
         AboutPanel = new AboutUsPanel();
         
+        ContentContainer.add(DashboardPanel, "DASHBOARD");
         ContentContainer.add(ProfilePanel, "PROFILE");
+        ContentContainer.add(AdminPanel, "ADMIN");
         ContentContainer.add(AboutPanel, "ABOUT");
         
         MenuContainer.add(menuPanel, BorderLayout.CENTER);
@@ -137,9 +142,10 @@ public class AppScreen extends JFrame
         ContentPanel.add(closeContainer);
         ContentPanel.add(ContentContainer);
         
-        
+        setSize(1440, 800);
         setResizable(false);
-        
+        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+        setLocation((dim.width - this.getSize().width)/2, (dim.height - this.getSize().height)/3);
         //Layout
         GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -162,6 +168,8 @@ public class AppScreen extends JFrame
     private void onClickDashboard(ActionEvent e)
     {
         System.out.println("Click on dashboard");
+        CardLayout cards = (CardLayout)(ContentContainer.getLayout());
+        cards.show(ContentContainer, "DASHBOARD");
     }
     
     private void onClickProfile(ActionEvent e)
@@ -175,6 +183,8 @@ public class AppScreen extends JFrame
     private void onClickAdmin(ActionEvent e)
     {
         System.out.println("Click on Admin console");
+        CardLayout cards = (CardLayout)(ContentContainer.getLayout());
+        cards.show(ContentContainer, "ADMIN");
     }
     
             
@@ -203,6 +213,8 @@ public class AppScreen extends JFrame
     private MenuPanel menuPanel;
     
     //panelcards
+    private DashboardPanel DashboardPanel;
     private ProfilePanel ProfilePanel;
+    private AdminPanel AdminPanel;
     private AboutUsPanel AboutPanel;
 }
