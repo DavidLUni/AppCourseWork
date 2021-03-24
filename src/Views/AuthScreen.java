@@ -5,6 +5,10 @@
  */
 package Views;
 
+import Models.PasswordUtils;
+import Models.UserDB;
+import Models.UserModel;
+import Models.Validator;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -21,6 +25,7 @@ import javax.swing.GroupLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
@@ -30,9 +35,10 @@ import javax.swing.SwingConstants;
  */
 public class AuthScreen extends JFrame
 {
-    
+    UserDB authDatabase;
     public AuthScreen()
     {
+        authDatabase = new UserDB();
         initComponents();
     }
     
@@ -181,7 +187,57 @@ public class AuthScreen extends JFrame
     private void onPressLogin(ActionEvent e)
     {
         System.out.println("Press on login");
-
+        //validate fields
+        //find account 
+        //if exist compare passwords.
+        //if everything correct open dashboard passing profile.
+        //close auth screen
+        
+        //if errors
+        //promt dialog to explain errors.
+        
+        String email = LoginPane.getEmail();
+        char[] password = LoginPane.getPassword();
+        
+        try {
+            //Validate inputs
+            Validator.isValidEmail(email);
+            Validator.isString(new String(password));
+            
+            //find user
+            
+            UserModel Account = authDatabase.findUserByEmail(email);
+            
+            if(Account != null)
+            {
+                System.out.println("Database: Account found.");
+                
+                //verify password.
+                System.out.println("Auth: Comparing passwords..");
+                if (PasswordUtils.verifyUserPassword(new String(password), Account.getPassword(), Account.getSalt()))
+                {
+                    System.out.println("Auth: Password match. access granted");
+                    
+                    //Access to dashboard
+                    //Go to dashboard
+                    AppScreen app = new AppScreen();
+                    app.setVisible(true);
+                    this.dispose();
+                }else
+                {
+                    System.out.println("Auth: Password does not match");
+                    throw new Exception("Email or password are not valid. Please try again");
+                }
+            }else
+            {
+                throw new Exception("Account does not exist. Please try again");
+            }
+            
+        } catch (Exception ex) {
+            System.out.println(ex);
+            JOptionPane.showMessageDialog(this, ex.getMessage());
+        }
+        
     }
     
     /*
@@ -190,11 +246,117 @@ public class AuthScreen extends JFrame
     private void onPressSignUp(ActionEvent e)
     {
         System.out.println("Press on SignUp");
+        //validate inputs
+        //if error during validations
+        //show error message.
+        //encryopt password 
+        //create usermodel
+        //insert account into db
+        //clean form and clean form
+        
+        String username = SignupPane.getUsername();
+        String email = SignupPane.getEmail();
+        char[] password = SignupPane.getPassword();
+        char[] confirmPassword = SignupPane.getConfirmPassword();
+        
+        //validate username email and passwords 
+        
+        try 
+        {
+            Validator.isString(username);
+            Validator.isValidEmail(email);
+            Validator.isValidPassword(new String(password));
+            Validator.isValidPassword(new String(confirmPassword));
+
+            //validate if the passwords are equal
+            Validator.confirmPassword(new String(password), new String(confirmPassword));
+
+            //Encrypt password
+            String salt = PasswordUtils.getSalt(20);
+            String hashPwd = PasswordUtils.generateSecurePassword(new String(password), salt);
+            
+            //create model account
+            UserModel newAccount = new UserModel();
+            newAccount.setUsername(username);
+            newAccount.setEmail(email);
+            newAccount.setSalt(salt);
+            newAccount.setPassword(hashPwd);
+            
+            //CALL INSTANCE OF DB;
+            authDatabase.createAccount(newAccount);
+            JOptionPane.showMessageDialog(this, "Account is succesfully created.");
+            //clean form
+            SignupPane.clean();
+            //go to login
+            CardLayout cards = (CardLayout)(authContainer.getLayout());
+            cards.show((authContainer), "LOGIN");
+        } catch (Exception ex) 
+        {
+            //Create a dialog box 
+            System.out.println(ex);
+            JOptionPane.showMessageDialog(this, ex.getMessage());
+        }
+        
     }
     
     private void onPressReset(ActionEvent e)
     {
        System.out.println("Press on Reset password");
+       
+       //validate inputs
+       //find account 
+       //hash password 
+       //update user 
+       //go to login.
+       
+       String email = ResetPane.getEmail();
+       char[] newPassword = ResetPane.getPassword();
+       char[] confirmPassword = ResetPane.getConfirmPassword();
+       
+        try 
+        {
+            //validate inputs
+            Validator.isValidEmail(email);
+            Validator.isValidPassword(new String(newPassword));
+            Validator.isValidPassword(new String(confirmPassword));
+            
+            //compare password to confirm are equals
+            Validator.confirmPassword(new String(newPassword), new String(confirmPassword));
+            
+            
+            //Find user
+            UserModel Account = authDatabase.findUserByEmail(email);
+            
+            if(Account != null)
+            {
+                //HASH new password and creating new salt
+                String salt = PasswordUtils.getSalt(20);
+                String password = PasswordUtils.generateSecurePassword(new String(newPassword), salt);
+                
+                //updating usermodel
+                Account.setSalt(salt);
+                Account.setPassword(password);
+                
+                //update record from database
+                authDatabase.updateUser(Account);
+                
+                JOptionPane.showMessageDialog(this, "Password has been updated.");
+                //GO TO LOGIN
+                CardLayout cards = (CardLayout)(authContainer.getLayout());
+                cards.show(authContainer, "LOGIN");
+                ResetPane.clean();
+                
+            }else
+            {
+                throw new Exception("Account does not exist. Please try again or create a new account.");
+            }
+            
+            
+        } catch (Exception ex) 
+        {
+            System.out.println(ex);
+            JOptionPane.showMessageDialog(this, ex.getMessage());
+        }
     }
     
     private void onPressCancel(ActionEvent e)

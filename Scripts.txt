@@ -1,0 +1,44 @@
+
+//Create user table
+
+CREATE TABLE IF NOT EXISTS USER(
+
+  ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+  USERNAME TEXT NOT NULL ,
+  EMAIL TEXT NOT NULL UNIQUE,
+  PASSWORD TEXT NOT NULL,
+  FIRSTNAME TEXT,
+  LASTNAME TEXT,
+  DESCRIPTION TEXT,
+  ROLE INTEGER DEFAULT 1,
+  create_at DATETIME DEFAULT current_timestamp,
+);
+
+
+//Insert account
+
+INSERT INTO user(username,email, password)
+VALUES(?,?,?);
+
+//Insert user 
+
+INSERT INTO user(username, firstname, lastname, description, email, password, role)
+VALUES(?,?,?,?,?,?,?);
+
+//update user
+UPDATE user SET 
+username = ?,
+email= ?,
+firstname = ?,
+lastname = ?,
+password = ?,
+description = ?,
+role = ?
+WHERE id = ?;
+
+
+//ShowOne
+SELECT * FROM user;
+
+//showAll
+SELECT id, username, email, firstname, lastname, role FROM user;
