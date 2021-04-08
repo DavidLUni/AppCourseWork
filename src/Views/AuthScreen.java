@@ -39,6 +39,7 @@ public class AuthScreen extends JFrame
     public AuthScreen()
     {
         authDatabase = new UserDB();
+        authDatabase.createTable();
         initComponents();
     }
     
@@ -220,7 +221,7 @@ public class AuthScreen extends JFrame
                     
                     //Access to dashboard
                     //Go to dashboard
-                    AppScreen app = new AppScreen();
+                    AppScreen app = new AppScreen(Account);
                     app.setVisible(true);
                     this.dispose();
                 }else

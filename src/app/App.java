@@ -4,12 +4,9 @@
  * and open the template in the editor.
  */
 package app;
-
 import Models.UserDB;
 import Models.UserModel;
-import Models.Validator;
 import Views.AppScreen;
-import Views.AuthScreen;
 /**
  *
  * @author juan
@@ -25,10 +22,12 @@ public class App
         // TODO code application logic here
 
     
-       AuthScreen authScreen = new AuthScreen();
-       authScreen.setVisible(true);
-        
-
+       /*AuthScreen authScreen = new AuthScreen();
+       authScreen.setVisible(true);*/
+        UserDB db = new UserDB();
+        UserModel Account = db.findUserByEmail("admin@admin.com");
+        AppScreen app = new AppScreen(Account);
+        app.setVisible(true);
       /**  AppScreen appScreen = new AppScreen();
         appScreen.setVisible(true);**/
 
