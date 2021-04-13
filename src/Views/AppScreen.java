@@ -205,7 +205,7 @@ public class AppScreen extends JFrame {
         createPanel.getSaveButton().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+               saveProfile(e);
             }
         });
 
@@ -323,7 +323,7 @@ public class AppScreen extends JFrame {
                     String newPassword = PasswordUtils.generateSecurePassword(password, salt);
 
                     this.profile.setSalt(salt);
-                    this.profile.setPassword(password);
+                    this.profile.setPassword(newPassword);
                 }
 
                 //update model
@@ -346,23 +346,10 @@ public class AppScreen extends JFrame {
                 this.ProfilePanel.setLastNameField(this.profile.getLastname());
                 this.ProfilePanel.setRoleBox(this.profile.getRole());
 
+                //update list
                 ArrayList<UserModel> newList = adminDB.showAll();
-                DefaultTableModel model = new DefaultTableModel();
-                model.setColumnIdentifiers(new Object[]{"ID", "USERNAME", "EMAIL", "ROLE", "USER"});
-                newList.forEach((user) -> {
-
-                    String user_role = (user.getRole() == 0) ? "Admin" : "User";
-                    model.addRow(new Object[]{
-                        user.getId(),
-                        user.getUsername(),
-                        user.getEmail(),
-                        user_role,
-                        user.getCreated_at()
-                    });
-                });
-
-                this.AdminPanel.getTable().setModel(model);
-
+                this.AdminPanel.setList(newList);
+                
                 JOptionPane.showMessageDialog(this, "Your profile has been updated");
             } catch (Exception ex) {
                 System.out.println(ex);
@@ -398,7 +385,7 @@ public class AppScreen extends JFrame {
                     String newPassword = PasswordUtils.generateSecurePassword(password, salt);
 
                     selectedUser.setSalt(salt);
-                    selectedUser.setPassword(password);
+                    selectedUser.setPassword(newPassword);
                 }
 
                 //update model user
@@ -414,21 +401,10 @@ public class AppScreen extends JFrame {
 
                 //refress
                 ArrayList<UserModel> newList = adminDB.showAll();
-                DefaultTableModel model = new DefaultTableModel();
-                model.setColumnIdentifiers(new Object[]{"ID", "USERNAME", "EMAIL", "ROLE", "USER"});
-                newList.forEach((user) -> {
 
-                    String user_role = (user.getRole() == 0) ? "Admin" : "User";
-                    model.addRow(new Object[]{
-                        user.getId(),
-                        user.getUsername(),
-                        user.getEmail(),
-                        user_role,
-                        user.getCreated_at()
-                    });
-                });
-
-                this.AdminPanel.getTable().setModel(model);
+                this.AdminPanel.setList(newList);
+                
+                JOptionPane.showMessageDialog(this, "User updated.");
 
             } catch (Exception ex) {
                 System.out.println(ex.getMessage());
@@ -439,13 +415,62 @@ public class AppScreen extends JFrame {
 
         if (e.getSource() == this.createPanel.getSaveButton()) //create user
         {
-            System.out.println("Press save or update create");
+            System.out.println("press to create new user");
             //verify if minimun field are written.
             //encrypt password
             //create user into database
             //close create
             //update admin console table
             //open user profile.
+            
+            String username = this.createPanel.getUsernameField();
+            String email = this.createPanel.getEmailField();
+            String firstName = this.createPanel.getFirstNameField();
+            String lastName = this.createPanel.getLastNameField();
+            int role = this.createPanel.getRole();
+            String password = this.createPanel.getPasswordField();
+            String description = this.createPanel.getDescriotionTextArea();
+            
+            //validate min fields required to create an user.
+            try {
+                Validator.isString(username);
+                Validator.isValidEmail(email);
+                Validator.isValidPassword(password);
+                
+                //encrypt password
+                String salt = PasswordUtils.getSalt(Constants.SALT);
+                String hashPwd = PasswordUtils.generateSecurePassword(password, salt);
+                
+                //createModel
+                UserModel newUser = new UserModel();
+                newUser.setEmail(email);
+                newUser.setDescription(description);
+                newUser.setLastname(lastName);
+                newUser.setFirstname(firstName);
+                newUser.setRole(role);
+                newUser.setSalt(salt);
+                newUser.setPassword(password);
+                
+                //Call instance of db.
+                adminDB.createUser(newUser);
+                JOptionPane.showMessageDialog(this, "New user is successfully created.");
+                
+               
+                //goto admin and update list 
+                this.UserList = adminDB.showAll();
+                this.AdminPanel.setList(UserList);
+                
+                CardLayout cards = (CardLayout) ContentContainer.getLayout();
+                cards.show(ContentContainer, "ADMIN");
+                createPanel.Clean();
+                
+            } catch (Exception ex) {
+                System.out.println(ex);
+                JOptionPane.showMessageDialog(this, ex.getMessage());
+            }
+            
+            
+            
         }
 
     }
@@ -524,8 +549,10 @@ public class AppScreen extends JFrame {
                         user.getCreated_at()
                         });
                     });
-                    
-                    
+                       
+                    //update table
+                    this.AdminPanel.setList(newList);
+                  
                     CardLayout cards = (CardLayout)(this.ContentContainer.getLayout());
                     cards.show(ContentContainer, "ADMIN");
                     this.UserPanel.Clean();
@@ -565,6 +592,7 @@ public class AppScreen extends JFrame {
                 try {
                     UserModel selectedUser = this.adminDB.showOne(id);
 
+                    this.UserPanel.setIdProfile(selectedUser.getId());
                     this.UserPanel.setUsernameField(selectedUser.getUsername());
                     this.UserPanel.setDescriotionTextArea(selectedUser.getDescription());
                     this.UserPanel.setLastNameField(selectedUser.getLastname());
@@ -574,6 +602,7 @@ public class AppScreen extends JFrame {
 
                     CardLayout cards = (CardLayout) (ContentContainer.getLayout());
                     cards.show(ContentContainer, "USER");
+                    
 
                 } catch (Exception ex) {
                     System.out.println(ex.getMessage());
@@ -586,7 +615,6 @@ public class AppScreen extends JFrame {
 
     private void createProfile(ActionEvent e) {
         System.out.println("Press create profile");
-
         CardLayout cards = (CardLayout) (ContentContainer.getLayout());
         cards.show(ContentContainer, "CREATE");
     }

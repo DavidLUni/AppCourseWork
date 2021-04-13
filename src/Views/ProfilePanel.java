@@ -315,7 +315,7 @@ public class ProfilePanel extends JPanel {
     private void onSelectRole(ActionEvent e) {
         JComboBox cb = (JComboBox) e.getSource();
         Integer roleName = (Integer) cb.getSelectedIndex();
-        System.out.println(roleName);
+        System.out.println("Role:" + roleName);
     }
 
     public String getUsernameField() {

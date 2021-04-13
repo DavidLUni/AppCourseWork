@@ -314,6 +314,12 @@ public class AdminPanel extends JPanel {
     public void setTable(JTable table) {
         this.table = table;
     }
+    
+    public void setList(ArrayList<UserModel> list)
+    {
+        this.list = list;
+        initTable();
+    }
 
 
     

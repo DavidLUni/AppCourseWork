@@ -57,6 +57,8 @@ public class AboutUsPanel extends JPanel
         container.setOpaque(false);
         
         card1 = new CardPanel();
+        
+        card1.setTitle("Juan");
         card2 = new CardPanel();
         card3 = new CardPanel();
         
