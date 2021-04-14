@@ -95,7 +95,7 @@ public class UserDB {
 
     }
 
-    public void createUser(UserModel User) {
+    public void createUser(UserModel User) throws Exception {
         Connection conn = Connect.getConnection();
         PreparedStatement stmt;
         String createString;
@@ -122,6 +122,8 @@ public class UserDB {
         } catch (SQLException ex) {
             Logger.getLogger(UserDB.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println("DATABASE: User error to create.");
+            
+            throw new Exception("User already exist.");
         }
     }
 
