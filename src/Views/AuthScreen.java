@@ -54,7 +54,7 @@ public class AuthScreen extends JFrame
         LogoPanel.setBackground(new Color(111,207,151));
         
         logoLabel = new JLabel();
-        Image img = new ImageIcon(getClass().getResource("/images/background.png")).getImage().getScaledInstance(300, 500, Image.SCALE_SMOOTH);
+        Image img = new ImageIcon(getClass().getResource("/images/background.png")).getImage().getScaledInstance(300, 500, Image.SCALE_AREA_AVERAGING);
         logoLabel.setIcon(new ImageIcon(img));
         
         //Panel where All the screen auth will be allocated.
