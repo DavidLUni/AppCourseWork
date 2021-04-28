@@ -5,7 +5,6 @@
  */
 package Models;
 
-import static com.sun.org.apache.xalan.internal.lib.ExsltDatetime.year;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -224,33 +223,5 @@ public class TrafficTable {
         //String sql = "UPDATE Traffic SET direction_of_travel = '" +  direction_of_travel + "', year = '" + year "' count_date = '" +  count_date + "' hour = '" + hour "', region_name = '" + region_name + "' , local_authority_name = '"  + local_authority_name "',road_name = '" + road_name "', latitude = '" 
     }
     
-    
-    public ArrayList<Integer> selectYears() 
-    {
-        ArrayList<Integer> yearList = new ArrayList();
-        try {
-            Connection connection = DB.getConnection();
-            
-            Statement stmt;
-            String stmtString = "SELECT year FROM traffic_count GROUP BY year";
-            
-            stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery(stmtString);
-            
-            System.out.println("DATABASE: Query successully.");
-            while(rs.next()) 
-            {
-                Integer year = rs.getInt("year");
-                yearList.add(year);
-            }
-            
-            
-        } catch (SQLException ex) {
-            Logger.getLogger(TrafficTable.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        return yearList;
-    }
-   
 }
 
