@@ -223,7 +223,7 @@ public class DashboardPanel extends JPanel {
         JLabel LatTag = new JLabel("LATITUDE:", SwingConstants.LEFT);
         LatTag.setFont(new Font("Arial", Font.BOLD, 14));
 
-        JLabel LongTag = new JLabel("SITE:", SwingConstants.LEFT);
+        JLabel LongTag = new JLabel("LONGITUDE:", SwingConstants.LEFT);
         LongTag.setFont(new Font("Arial", Font.BOLD, 14));
 
         //labels to be modified;
@@ -282,7 +282,7 @@ public class DashboardPanel extends JPanel {
                 .getImage()
                 .getScaledInstance(16, 16, Image.SCALE_SMOOTH);
 
-        JLabel Title1 = new JLabel("Number vehicles by type.");
+        JLabel Title1 = new JLabel("Annual traffict by Type.");
         Title1.setFont(new Font("Arial", Font.BOLD, 14));
         Title1.setIcon(new ImageIcon(dot));
         Title1.setSize(new Dimension(850, 20));
@@ -290,7 +290,7 @@ public class DashboardPanel extends JPanel {
         Title1.setMaximumSize(new Dimension(850, 20));
         Title1.setAlignmentX(0.5f);
 
-        JLabel Title2 = new JLabel("Annual traffic by vehicle type by direction of Travel.");
+        JLabel Title2 = new JLabel("Annual traffic by direction of Travel.");
         Title2.setFont(new Font("Arial", Font.BOLD, 14));
         Title2.setIcon(new ImageIcon(dot));
         Title2.setSize(new Dimension(850, 20));
@@ -298,7 +298,7 @@ public class DashboardPanel extends JPanel {
         Title2.setMaximumSize(new Dimension(850, 20));
         Title2.setAlignmentX(0.5f);
 
-        JLabel Title3 = new JLabel("Annual traffic by vehicle type by time interval.");
+        JLabel Title3 = new JLabel("Annual traffic by time interval.");
         Title3.setFont(new Font("Arial", Font.BOLD, 14));
         Title3.setIcon(new ImageIcon(dot));
         Title3.setSize(new Dimension(850, 20));
