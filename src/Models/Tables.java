@@ -33,7 +33,7 @@ public class Tables {
                     "    pedal_cycles INTEGER,\n" +
                     "    two_wheeled_motor_vehicles INTEGER,\n" +
                     "    cars_and_taxis INTEGER,\n" +
-                    "    buses_and_taxis INTEGER,\n" +
+                    "    buses_and_coaches INTEGER,\n" +
                     "    lgvs INTEGER,\n" +
                     "    CONSTRAINT fk_count_point\n" +
                     "    FOREIGN KEY (count_point_id) \n" +

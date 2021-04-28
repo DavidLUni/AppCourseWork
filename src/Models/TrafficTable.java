@@ -98,7 +98,7 @@ public class TrafficTable {
     }
     
     
-    /*public static void insertTrafficCount(
+    public static void insertTrafficCount(
             Integer count_point_id, 
             Integer hour,
             String direction_of_travel,
@@ -107,7 +107,7 @@ public class TrafficTable {
             Integer pedal_cycles,
             Integer two_wheeled_motor_vehicles,
             Integer cars_and_taxis,
-            Integer buses_and_taxis,
+            Integer buses_and_coaches,
             Integer lgvs
             ) 
     {
@@ -118,23 +118,29 @@ public class TrafficTable {
 
         createString = "INSERT INTO traffic_count ("
                 + "count_point_id, "
-                + "region_name,"
-                + "local_authority_name,"
-                + "road_name,"
-                + "road_type,"
-                + "latitude,"
-                + "longitude)"
-                + " VALUES (?,?,?,?,?,?,?);";
+                + "hour,"
+                + "direction_of_travel,"
+                + "year,"
+                + "count_date,"
+                + "pedal_cycles,"
+                + "two_wheeled_motor_vehicles,"
+                + "cars_and_taxis,"
+                + "buses_and_coaches,"
+                + "lgvs)"
+                + " VALUES (?,?,?,?,?,?,?,?,?,?);";
 
         try {
             stmt = conn.prepareStatement(createString);
             stmt.setInt(1, count_point_id);
-            stmt.setString(2, region_name);
-            stmt.setString(3, local_authority_name);
-            stmt.setString(4, road_name);
-            stmt.setString(5, road_type);
-            stmt.setDouble(6, latitude);
-            stmt.setDouble(7, longitude);
+            stmt.setInt(2, hour);
+            stmt.setString(3, direction_of_travel);
+            stmt.setInt(4, year);
+            stmt.setString(5, count_date);
+            stmt.setInt(6, pedal_cycles);
+            stmt.setInt(7, two_wheeled_motor_vehicles);
+            stmt.setInt(8, cars_and_taxis);
+            stmt.setInt(9, buses_and_coaches);
+            stmt.setInt(10, lgvs);
 
             stmt.executeUpdate();
             System.out.println("DATABASE: countpoint successfully created ");
@@ -145,7 +151,43 @@ public class TrafficTable {
         } 
     
     }
-    */
+    
+    public static void batchTrafficCount(ArrayList<String> input)
+    {
+        
+        for (String currentLine : input)
+        {
+            String[] lineArray = currentLine.split(",");
+            
+            
+            Integer count_point_id = Integer.parseInt(lineArray[0]);
+            Integer hour = Integer.parseInt(lineArray[7]);
+            String direction_of_travel = lineArray[8];
+            Integer year = Integer.parseInt(lineArray[9]);
+            String count_date = lineArray[10];
+            Integer pedal_cycles = Integer.parseInt(lineArray[11]);
+            Integer two_wheeled_motor_vehicles = Integer.parseInt(lineArray[12]);
+            Integer cars_and_taxis = Integer.parseInt(lineArray[13]);
+            Integer buses_and_coaches = Integer.parseInt(lineArray[14]);
+            Integer lgvs = Integer.parseInt(lineArray[15]);
+            
+            
+            insertTrafficCount(
+                    count_point_id,
+                    hour, 
+                    direction_of_travel, 
+                    year, 
+                    count_date, 
+                    pedal_cycles, 
+                    two_wheeled_motor_vehicles, 
+                    cars_and_taxis, 
+                    buses_and_coaches, 
+                    lgvs);
+        }
+    
+    }
+    
+    
 
     public static ResultSet get(int count_point_id) throws SQLException
     {

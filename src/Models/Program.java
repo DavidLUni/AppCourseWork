@@ -24,7 +24,7 @@ public class Program {
         //Tables.createCountPoint();
         //Tables.createTrafficDataTables();
         //TrafficTable.batchCountPoint(fileContents);
-        
+        //TrafficTable.batchTrafficCount(fileContents);
         
         
 
