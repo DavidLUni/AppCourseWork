@@ -20,9 +20,11 @@ public class Program {
     public static void main (String[] args)   {
         
         ArrayList<String> fileContents = CSVReader.readFile("./Data.csv");
+       
+        //Tables.createCountPoint();
+        //Tables.createTrafficDataTables();
+        //TrafficTable.batchCountPoint(fileContents);
         
-
-
         
         
 

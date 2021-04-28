@@ -7,6 +7,7 @@ package Models;
 
 import static com.sun.org.apache.xalan.internal.lib.ExsltDatetime.year;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -21,73 +22,130 @@ import java.util.logging.Logger;
 public class TrafficTable {
 
     
-    public static void insert(int count_point_id , String direction_of_travel  , String year , String count_date, String hour , String region_name, String local_authority_name, String road_name, String latitude, String longitude, String pedal_cycles, String two_wheeled_motor_vehicles, String cars_and_taxes, String buses_and_coaches, String lgvs ) throws SQLException
+    public static void insertCountPoint(
+            Integer count_point_id, 
+            String region_name,
+            String local_authority_name,
+            String road_type,
+            String road_name,
+            Double latitude,
+            Double longitude
+            ) 
     {
         
-        Connection connection = DB.getConnection();
-        
-        String sql = "INSERT INTO Traffic (count_point_id , direction_of_travel, year, count_date, hour, region_name, local_authority_name,road_name, latitude, longitude, pedal_cycles, two_wheeled_motor_vehicles, cars_and_taxes, buses_and_coaches, lgvs) VALUES "
-                +"("
-                +"'" + count_point_id + "',"
-                +"'" + direction_of_travel+ "',"
-                +"'" + year + "',"
-                +"'" + count_date + "',"
-                +"'" + hour + "',"
-                +"'" + region_name + "',"
-                +"'" + local_authority_name + "',"
-                +"'" + road_name + "',"
-                +"'" + latitude + "',"
-                +"'" + longitude + "',"
-                +"'" + pedal_cycles+ "',"
-                +"'" + two_wheeled_motor_vehicles + "',"
-                +"'" + cars_and_taxes + "',"
-                +"'" + buses_and_coaches+ "',"
-                +"'" + lgvs + "'"
-                +")" ;
-        
-        try 
-        {
-        
-            Statement statement = connection.createStatement();
-            statement.executeUpdate(sql);
-            System.out.println("Traffic" + direction_of_travel + "inserted!");
-        }
-        catch (Exception e)
-        {
-            System.out.println("Error while inserting into Traffic table"  + e.getMessage());
+        Connection conn = Connect.getConnection();
+        PreparedStatement stmt;
+        String createString;
+
+        createString = "INSERT INTO count_point ("
+                + "count_point_id, "
+                + "region_name,"
+                + "local_authority_name,"
+                + "road_name,"
+                + "road_type,"
+                + "latitude,"
+                + "longitude)"
+                + " VALUES (?,?,?,?,?,?,?);";
+
+        try {
+            stmt = conn.prepareStatement(createString);
+            stmt.setInt(1, count_point_id);
+            stmt.setString(2, region_name);
+            stmt.setString(3, local_authority_name);
+            stmt.setString(4, road_name);
+            stmt.setString(5, road_type);
+            stmt.setDouble(6, latitude);
+            stmt.setDouble(7, longitude);
+
+            stmt.executeUpdate();
+            System.out.println("DATABASE: countpoint successfully created ");
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDB.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("DATABASE: countpoint error to create.");
+ 
         }
 }
     
-    public static void batchIntsert(ArrayList<String> input)
+    
+    public static void batchCountPoint(ArrayList<String> input)
     {
+        
         for (String currentLine : input)
         {
             String[] lineArray = currentLine.split(",");
-            int count_point_id = Integer.parseInt(lineArray[0]);
-            String direction_of_travel = lineArray[1];
-            String year = lineArray[2];
-            String count_date = lineArray[3];
-            String hour = lineArray[4];
-            String region_name = lineArray[5];
-            String local_authority_name = lineArray[6];
-            String road_name = lineArray[7];
-            String latitude = lineArray[8];
-            String longitude = lineArray[9];
-            String pedal_cycles = lineArray[10];
-            String two_wheeled_motor_vehicles = lineArray[11];
-            String cars_and_taxes = lineArray[12];
-            String buses_and_coaches = lineArray[13];
-            String lgvs = lineArray[14];
             
+            Integer count_point_id = Integer.parseInt(lineArray[0]);
+            String region_name = lineArray[1];
+            String local_authority_name = lineArray[2];
+            String road_name = lineArray[3];
+            String road_type = lineArray[4];
+            Double latitude = Double.parseDouble(lineArray[5]);
+            Double longitude = Double.parseDouble(lineArray[6]);
+          
+            insertCountPoint(
+                    count_point_id, 
+                    region_name, 
+                    local_authority_name, 
+                    road_type, 
+                    road_name, 
+                    latitude, 
+                    longitude);
             
-            
-            
+  
             //insert(count_point_id,direction_of_travel,year,count_date ,hour, region_name,local_authority_name,road_name,latitude,longitude,pedal_cycles,two_wheeled_motor_vehicles,cars_and_taxes,buses_and_coaches,lgvs);
             
         }
     }
     
     
+    /*public static void insertTrafficCount(
+            Integer count_point_id, 
+            Integer hour,
+            String direction_of_travel,
+            Integer year,
+            String count_date,
+            Integer pedal_cycles,
+            Integer two_wheeled_motor_vehicles,
+            Integer cars_and_taxis,
+            Integer buses_and_taxis,
+            Integer lgvs
+            ) 
+    {
+        
+        Connection conn = Connect.getConnection();
+        PreparedStatement stmt;
+        String createString;
+
+        createString = "INSERT INTO traffic_count ("
+                + "count_point_id, "
+                + "region_name,"
+                + "local_authority_name,"
+                + "road_name,"
+                + "road_type,"
+                + "latitude,"
+                + "longitude)"
+                + " VALUES (?,?,?,?,?,?,?);";
+
+        try {
+            stmt = conn.prepareStatement(createString);
+            stmt.setInt(1, count_point_id);
+            stmt.setString(2, region_name);
+            stmt.setString(3, local_authority_name);
+            stmt.setString(4, road_name);
+            stmt.setString(5, road_type);
+            stmt.setDouble(6, latitude);
+            stmt.setDouble(7, longitude);
+
+            stmt.executeUpdate();
+            System.out.println("DATABASE: countpoint successfully created ");
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDB.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("DATABASE: countpoint error to create.");
+ 
+        } 
+    
+    }
+    */
 
     public static ResultSet get(int count_point_id) throws SQLException
     {

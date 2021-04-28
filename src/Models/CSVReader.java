@@ -37,7 +37,8 @@ public class CSVReader {
         }
         
 
-        
+        //remove header
+        fileContents.remove(0);
         return fileContents;
     }
     
