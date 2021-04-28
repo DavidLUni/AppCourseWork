@@ -5,6 +5,9 @@
  */
 package Views;
 
+import Models.CountPointModel;
+import Models.Queries;
+import Models.TrafficCountModel;
 import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -14,6 +17,7 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -46,7 +50,8 @@ public class DashboardPanel extends JPanel {
         this.containerInfo.setVisible(false);
 
         //loadselectors
-        //LoadSelections();
+        loadCounts();
+        LoadSelections();
     }
 
     private void initComponents() {
@@ -377,19 +382,22 @@ public class DashboardPanel extends JPanel {
     private void onSelect(ActionEvent e) {
 
         String countPoint = (String) this.countPointBox.getSelectedItem();
-        String year = (String) this.yearBox.getSelectedItem();
+        Integer year = (Integer) this.yearBox.getSelectedItem();
 
         System.out.println("countPoint: " + countPoint);
         System.out.println("Year:" + year);
 
+        Integer point = Integer.parseInt(countPoint.split("-")[0]);
+        
         //Hide the cointainer
         this.containerInfo.setVisible(false);
 
         //run
-        // LoadCountDetails(countPoint);
-        //LoadCountbyType (countPoint, year);
-        // LoadCountbyDirection(countPoint, year); 
-        // LoadCountByIntervals(countPoint, year);
+        loadCountDetails(point);
+        LoadCountbyType (point, year);
+        LoadCountbyDirection(point, year); 
+        LoadCountbyIntervals(point, year);
+        
         // show contaienr
         this.containerInfo.setVisible(true);
     }
@@ -539,6 +547,12 @@ public class DashboardPanel extends JPanel {
         TOTAL tWO wheels 
         TOTAL FOUR WHEELS
          */
+        
+        totalCountPoints = Queries.selectCountPoints();
+        ArrayList<Integer> counts = Queries.selectTwoAndFourWheels();
+        totalTwoWheels = counts.get(0);
+        totalFourWheels = counts.get(1);
+        
         //UPDATE LABELS
         this.countLabel.setText(totalCountPoints.toString());
         this.twoLabel.setText(totalTwoWheels.toString());
@@ -547,11 +561,13 @@ public class DashboardPanel extends JPanel {
 
     //load  list controlpoints
     private void LoadSelections() {
-        Object[] ControlPoints = null;
-        Object[] years = null;
+        Object[] ControlPoints;
+        Object[] years;
 
         //query to get the lists
         //year descendent
+        years = Queries.selectYears().toArray();
+        ControlPoints = Queries.selectCountPointAndId().toArray();
         //count ascendent
         //if everything is ok
         if (ControlPoints != null && years != null) {
@@ -567,9 +583,9 @@ public class DashboardPanel extends JPanel {
     }
 
     //load  countPoint details
-    private void loadCountDetails(String CountPoint) {
+    private void loadCountDetails(Integer CountPoint) {
         //cast parameters 
-        String point = CountPoint;
+        Integer point = CountPoint;
 
         //variables required
         String site = "";
@@ -579,8 +595,16 @@ public class DashboardPanel extends JPanel {
         Double lat = 0.0;
         Double lng = 0.0;
 
+        
         //run query
         
+        CountPointModel model = Queries.selectCountPointDetails(point);
+        site = model.getCount_point_id().toString();
+        roadName = model.getRoad_name();
+        roadType = model.getRoad_type();
+        lat = model.getLatitude();
+        lng = model.getLongitude();
+       
         //display data.
         this.SiteLabel.setText(site);
         this.NameLabel.setText(roadName);
@@ -591,21 +615,26 @@ public class DashboardPanel extends JPanel {
 
     //load  vehicles by type
     
-    private void LoadCountbyType(String CountPoint, String Year)
+    private void LoadCountbyType(Integer CountPoint, Integer Year)
     {
         //cast 
-        String point= CountPoint;
-        Integer year = Integer.parseInt(Year, 10);
+        Integer point= CountPoint;
+        Integer year = Year;
         
         //create dataset
         DefaultCategoryDataset dataSet = new DefaultCategoryDataset();
         
         
         //retrieve data from database
-        
+        TrafficCountModel model = Queries.selectTotalVehiclesByTypeInAYear(point, year);
         
         //add data to dataset.
         //dataSet.addValue("count", "carType", "");
+        dataSet.addValue(model.getPedal_cycles(), "Pedal Cycles", "");
+        dataSet.addValue(model.getCars_and_taxis(), "Car & Taxis", "");
+
+        dataSet.addValue(model.getBuses_and_coaches(), "Bus & Couches", "");
+        dataSet.addValue(model.getLgvs(), "LGV", "");
         
         this.barChart.getCategoryPlot().setDataset(dataSet);
         
@@ -614,44 +643,75 @@ public class DashboardPanel extends JPanel {
     }
     //load  vehicles by direction
     
-    private void LoadCountbyDirection(String CountPoint, String Year)
+    private void LoadCountbyDirection(Integer CountPoint, Integer Year)
     {
         //cast 
-        String point= CountPoint;
-        Integer year = Integer.parseInt(Year, 10);
+        Integer point= CountPoint;
+        Integer year = Year;
         
         //create dataset
         DefaultCategoryDataset dataSet = new DefaultCategoryDataset();
         
         
         //retrieve data from database
-        
+        ArrayList<TrafficCountModel> model = Queries.selectVehiclesDirectionInYear(point, year);
         
         //add data to dataset.
         //dataSet.addValue("count", "Direction", "");
-        
+         
+        for (TrafficCountModel count : model) {
+            dataSet.addValue(count.getTotal(), count.getDirection_of_travel(), "");
+        }
         //set dataset
         this.directionBar.getCategoryPlot().setDataset(dataSet);
         
     }
     
     //load  vehicles by time interval
-    private void LoadCountbyIntervals (String CountPoint, String Year)
+    private void LoadCountbyIntervals (Integer CountPoint, Integer Year)
     {
         //cast 
-        String point= CountPoint;
-        Integer year = Integer.parseInt(Year, 10);
+        Integer point= CountPoint;
+        Integer year = Year;
         
         //create dataset
         DefaultCategoryDataset dataSet = new DefaultCategoryDataset();
         
         
         //retrieve data from database
-        
+        ArrayList<TrafficCountModel> list = Queries.selectVehicleTypeByTimeYear(point, year);
         
         //add data to dataset.
         //dataSet.addValue("count", "carType", "timeInterval");
+        for (TrafficCountModel model : list) {
+            dataSet.addValue(model.getPedal_cycles(), "Pedal Cycles", Integer.toString(model.getHour()));
+            dataSet.addValue(model.getCars_and_taxis(), "Car & Taxis", Integer.toString(model.getHour()));
+            dataSet.addValue(model.getBuses_and_coaches(), "Bus & Couches", Integer.toString(model.getHour()));
+            dataSet.addValue(model.getLgvs(), "LGV", Integer.toString(model.getHour()));
+        }
         
+        
+        /*
+        dataset.addValue(1, "Pedal Cycles", "7");
+        dataset.addValue(15, "Pedal Cycles", "8");
+        dataset.addValue(3, "Pedal Cycles", "9");
+        dataset.addValue(5, "Pedal Cycles", "10");
+
+        dataset.addValue(1, "Car & Taxis", "7");
+        dataset.addValue(2, "Car & Taxis", "8");
+        dataset.addValue(3, "Car & Taxis", "9");
+        dataset.addValue(1, "Car & Taxis", "10");
+
+        dataset.addValue(4, "Bus & Couches", "7");
+        dataset.addValue(3, "Bus & Couches", "8");
+        dataset.addValue(8, "Bus & Couches", "9");
+        dataset.addValue(14, "Bus & Couches", "10");
+
+        dataset.addValue(4, "LGV", "7");
+        dataset.addValue(7, "LGV", "8");
+        dataset.addValue(1, "LGV", "9");
+        dataset.addValue(9, "LGV", "10");
+        */
         this.lineChart.getCategoryPlot().setDataset(dataSet);
         
     } 
