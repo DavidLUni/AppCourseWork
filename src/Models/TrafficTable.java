@@ -11,6 +11,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -123,6 +125,32 @@ public class TrafficTable {
     }
     
     
+    public ArrayList<Integer> selectYears() 
+    {
+        ArrayList<Integer> yearList = new ArrayList();
+        try {
+            Connection connection = DB.getConnection();
+            
+            Statement stmt;
+            String stmtString = "SELECT year FROM traffic_count GROUP BY year";
+            
+            stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery(stmtString);
+            
+            System.out.println("DATABASE: Query successully.");
+            while(rs.next()) 
+            {
+                Integer year = rs.getInt("year");
+                yearList.add(year);
+            }
+            
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(TrafficTable.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return yearList;
+    }
    
 }
 
