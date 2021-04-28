@@ -59,8 +59,18 @@ public class AboutUsPanel extends JPanel
         card1 = new CardPanel();
         
         card1.setTitle("Juan");
+        card1.setSubTitle("Student");
+        card1.setDescription("Front-end and Back-end student with experience in design of mobile applications. \n"
+                + "Swills in JavaScript, HTML, CSS, NODEJS, SQL, MONGODB.");
+        
         card2 = new CardPanel();
+        card2.setTitle("Mohammed");
+        card2.setSubTitle("Student");
+        card2.setDescription("Front-end student with experience in design of web and desktop applications. \n"
+                + "Skill is HTML, CSS, JAVASCRIPT, JAVA, SQL");
         card3 = new CardPanel();
+        card3.setTitle("Mehedi");
+        card3.setSubTitle("Student");
         
         westminserLabel = new JLabel();
         Image westIcon = new ImageIcon(getClass().getResource("/images/westminster.png"))
