@@ -46,7 +46,7 @@ public class DashboardPanel extends JPanel {
         this.containerInfo.setVisible(false);
 
         //loadselectors
-        LoadSelections();
+        //LoadSelections();
     }
 
     private void initComponents() {
